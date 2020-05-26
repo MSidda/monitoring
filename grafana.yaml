@@ -167,11 +167,11 @@ spec:
       labels:
         name: node-exporter
     spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
       containers:
       - image: prom/node-exporter
         name: node-exporter
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
         ports:
         - containerPort: 9100
           name: scrape
