@@ -176,14 +176,14 @@ spec:
           hostPort: 9100
           name: scrape
         volumeMounts:
-          - name: dev
-            mountPath: /host/dev
-          - name: proc
-            mountPath: /host/proc
-          - name: sys
-            mountPath: /host/sys
-          - name: rootfs
-            mountPath: /rootfs  
+        - name: dev
+          mountPath: /host/dev
+        - name: proc
+          mountPath: /host/proc
+        - name: sys
+          mountPath: /host/sys
+        - name: rootfs
+          mountPath: /rootfs  
       hostNetwork: true
       hostPID: true
       volumes:
