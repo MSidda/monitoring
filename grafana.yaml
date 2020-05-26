@@ -151,7 +151,7 @@ spec:
     port: 9100
     protocol: TCP
   selector:
-    app: node-exporter
+    name: node-exporter
   type: ClusterIP
 ---
 apiVersion: apps/v1
@@ -161,12 +161,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: node-exporter
       name: node-exporter
   template:
     metadata:
       labels:
-        app: node-exporter
         name: node-exporter
     spec:
       containers:
