@@ -60,7 +60,7 @@ spec:
           # initialDelaySeconds: 30
           # timeoutSeconds: 1
         volumeMounts:
-        - mountPath: etc/grafana/provisioning/datasources
+        - mountPath: /etc/grafana/provisioning/datasources
           name: grafana-datasources
         - mountPath: /var/lib/grafana
           name: grafana-storage
@@ -337,7 +337,7 @@ kind: ConfigMap
 metadata:
   labels:
     app: grafana
-  name: grafana-config
+  name: grafana-datasources
   namespace: monitoring
 data:
   prometheus.yml: |-
