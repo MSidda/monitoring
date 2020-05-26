@@ -155,17 +155,16 @@ spec:
          prometheus.io/port: "9100"
     spec:
       #serviceAccountName: cluster-reader
-      hostPID: true
-      hostIPC: true
-      hostNetwork: true
+    
       securityContext:
         runAsUser: 0
       containers:
         - name: node-exporter
-          image: quay.io/prometheus/node-exporter:v0.16.0
+          image: quay.io/prometheus/node-exporter:v0.17.0
           ports:
             - containerPort: 9100
               name: node-exporter
+              hostPort: 9100
               protocol: TCP
           resources:
             requests:
@@ -192,6 +191,8 @@ spec:
               mountPath: /host/sys
             - name: rootfs
               mountPath: /rootfs
+      hostNetwork: true
+      hostPID: true
       volumes:
         - name: proc
           hostPath:
