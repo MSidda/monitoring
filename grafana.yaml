@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana-mon-core
@@ -8,6 +8,10 @@ metadata:
     component: core
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+      component: core
   template:
     metadata:
       labels:
@@ -17,7 +21,7 @@ spec:
       securityContext:
         runAsUser: 0
       containers:
-      - image: grafana/grafana:6.3.3
+      - image: grafana/grafana:latest
         name: grafana-core
         imagePullPolicy: IfNotPresent
       #nodeName: test-monitoring
@@ -52,10 +56,10 @@ spec:
           # does not really work, because of template variables in exported dashboards:
           # - name: GF_DASHBOARDS_JSON_ENABLED
           #   value: "true"
-        readinessProbe:
-          httpGet:
-            path: /login
-            port: 3000
+          # readinessProbe:
+          #httpGet:
+          # path: /login
+          #  port: 3000
           # initialDelaySeconds: 30
           # timeoutSeconds: 1
         volumeMounts:
@@ -72,6 +76,9 @@ spec:
        - name: config-volume
          configMap:
           name: grafana-config
+       - name: grafana-datasources
+         configMap:
+          name: grafana-datasources
        - name: grafana-storage
          persistentVolumeClaim:
           claimName: grafana-pv-claim
@@ -131,7 +138,7 @@ spec:
     requests:
       storage: 50Gi
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: node-exporter
@@ -139,6 +146,9 @@ metadata:
   labels:
     name: node-exporter
 spec:
+  selector:
+    matchLabels:
+      name: node-exporter
   template:
     metadata:
       labels:
@@ -225,12 +235,12 @@ spec:
           containerPort: 8080
         - name: telemetry
           containerPort: 8081
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
+        #readinessProbe:
+        #  httpGet:
+        #   path: /healthz
+        #    port: 8080
+        #  initialDelaySeconds: 5
+        #  timeoutSeconds: 5
       - name: addon-resizer
         image: k8s.gcr.io/addon-resizer:1.8.3
         resources:
@@ -333,7 +343,7 @@ metadata:
   name: grafana-config
   namespace: monitoring
 data:
-  prometheus.yaml: |-
+  prometheus.yml: |-
     {
         "apiVersion": 1,
         "datasources": [
