@@ -172,8 +172,9 @@ spec:
         name: node-exporter
         ports:
         - containerPort: 9100
-          hostPort: 9100
           name: scrape
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
         volumeMounts:
         - name: dev
           mountPath: /host/dev
