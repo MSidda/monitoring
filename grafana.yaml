@@ -197,7 +197,8 @@ spec:
         hostPath:
           path: /sys
       - name: rootfs
-        hostPath: /
+        hostPath: 
+          path: /
  
 ---
 
