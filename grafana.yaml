@@ -161,12 +161,13 @@ metadata:
 spec:
   selector:
     matchLabels:
+      app: node-exporter
       name: node-exporter
   template:
     metadata:
       labels:
         app: node-exporter
-      name: node-exporter
+        name: node-exporter
     spec:
       containers:
       - image: prom/node-exporter
