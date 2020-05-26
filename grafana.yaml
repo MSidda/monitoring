@@ -135,62 +135,52 @@ spec:
     requests:
       storage: 50Gi
 ---
-apiVersion: apps/v1
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: node-exporter
+    name: node-exporter
+  name: node-exporter
+spec:
+  clusterIP: None
+  ports:
+  - name: scrape
+    port: 9100
+    protocol: TCP
+  selector:
+    app: node-exporter
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: node-exporter
-  namespace: monitoring
-  labels:
-    name: node-exporter
 spec:
-  selector:
-    matchLabels:
-      name: node-exporter
   template:
     metadata:
       labels:
-        name: node-exporter
-      annotations:
-         prometheus.io/scrape: "true"
-         prometheus.io/port: "9100"
+        app: node-exporter
+      name: node-exporter
     spec:
-      #serviceAccountName: cluster-reader
-    
-      securityContext:
-        runAsUser: 0
       containers:
-        - name: node-exporter
-          image: quay.io/prometheus/node-exporter:v0.17.0
-          ports:
-            - containerPort: 9100
-              name: node-exporter
-              hostPort: 9100
-              protocol: TCP
-          resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-            limits:
-              cpu: 100m
-              memory: 64Mi
-          securityContext:
-            privileged: true
-          args:
-            - --path.procfs=/host/proc
-            - --path.sysfs=/host/sys
-            #- --path.rootfs=/rootfs
-            #- --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs)($|/)
-            - --collector.filesystem.ignored-mount-points=^\/rootfs\/(sys|proc|dev|var\/lib|run\/docker|home\/kubernetes)\/.*
-            - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
-          volumeMounts:
-            - name: dev
-              mountPath: /host/dev
-            - name: proc
-              mountPath: /host/proc
-            - name: sys
-              mountPath: /host/sys
-            - name: rootfs
-              mountPath: /rootfs
+      - image: prom/node-exporter
+        name: node-exporter
+        ports:
+        - containerPort: 9100
+          hostPort: 9100
+          name: scrape
+        volumeMounts:
+          - name: dev
+            mountPath: /host/dev
+          - name: proc
+            mountPath: /host/proc
+          - name: sys
+            mountPath: /host/sys
+          - name: rootfs
+            mountPath: /rootfs  
       hostNetwork: true
       hostPID: true
       volumes:
@@ -204,8 +194,7 @@ spec:
           hostPath:
             path: /sys
         - name: rootfs
-          hostPath:
-            path: /
+          hostPath: /
  
 ---
 
