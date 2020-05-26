@@ -159,6 +159,9 @@ kind: DaemonSet
 metadata:
   name: node-exporter
 spec:
+  selector:
+    matchLabels:
+      name: node-exporter
   template:
     metadata:
       labels:
