@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  namespace: monitoring
+spec:
+  replicas: 1
+  #podManagementPolicy: "Parallel"
+  #updateStrategy:
+  # type: "RollingUpdate"
+  selector:
+    matchLabels:
+      app: prometheus-server
+  template:
+    metadata:
+      labels:
+        app: prometheus-server
+    spec:
+      #priorityClassName: system-cluster-critical
+      serviceAccountName: monitoring
+      #initContainers:
+      #- name: "init-chown-data"
+      #  image: "busybox:latest"
+      #  imagePullPolicy: "IfNotPresent"
+      #  command: ["chown", "-R", "65534:65534", "/prometheus/"]
+      #  volumeMounts:
+      #  - name: prometheus-storage-volume
+      #    mountPath: /prometheus/
+      #    subPath: ""
+      containers:
+        - name: prometheus
+          image: quay.io/prometheus/prometheus:v2.4.3
+          imagePullPolicy: "IfNotPresent"
+          #nodeName: test-monitoring
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus/"
+            - "--web.enable-lifecycle"
+            - "--storage.tsdb.no-lockfile"
+            - "--storage.tsdb.retention=90d"
+            - "--storage.tsdb.max-block-duration=2h"
+           # - "--volume-dir=/etc/prometheus/"
+           # - "--webhook-url=http://localhost:9090/-/reload"
+          resources:
+            requests:
+              memory: "250M"
+              cpu: "250m"
+            limits:
+              memory: "5G"
+              cpu: "1200m"
+          ports:
+            - name: prometheus
+              containerPort: 9090
+          #readinessProbe:
+           # httpGet:
+           #   path: /-/ready
+           #   port: 9090
+           # initialDelaySeconds: 30
+           # timeoutSeconds: 30
+          #livenessProbe:
+          #  httpGet:
+          #    path: /-/healthy
+          #    port: 9090
+          #  initialDelaySeconds: 30
+          #  timeoutSeconds: 30
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/
+              readOnly: true
+            - name: prometheus-storage-volume
+              mountPath: /prometheus/
+              subPath: ""
+              #readOnly: true     
+      securityContext:
+        fsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+      #terminationGracePeriodSeconds: 300    
+      volumes:
+        - name: prometheus-config-volume
+          configMap:
+            defaultMode: 420
+            name: prometheus-server-conf
+        - name: prometheus-storage-volume
+          persistentVolumeClaim:
+            claimName: prometheus-pv-claim
+            #readOnly: true
