@@ -1,5 +1,6 @@
 alertmanager:
   name: alertmanager
+  serviceType: ClusterIP
   ## Alertmanager service port
   ##
   httpPort: 80
@@ -20,15 +21,9 @@ namespace: monitoring
 #     requests:
 #       cpu: 10m
 #       memory: 32Mi
-
-  ## Alertmanager service type
-  ##
-  serviceType: ClusterIP
-
-  ## Alertmanager data storage path
-  ## Default: '/data'
-  ##
-  # storagePath: /data
+## Alertmanager data storage path
+## Default: '/data'
+# storagePath: /data
 
 ## Monitors ConfigMap changes and POSTs to a URL
 ## Ref: https://github.com/jimmidyson/configmap-reload
