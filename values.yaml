@@ -13,10 +13,10 @@ alertmanager:
   image: prom/alertmanager:v0.5.1
 namespace: monitoring
 
-  ingress:
+  #ingress:
     ## If true, Alertmanager Ingress will be created
     ##
-    enabled: false
+    #enabled: false
 
     ## Alertmanager Ingress annotations
     ##
