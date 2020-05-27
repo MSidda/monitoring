@@ -13,13 +13,13 @@ alertmanager:
   ##
   image: prom/alertmanager:v0.5.1
 namespace: monitoring 
-  resources:
-    # limits:
-    #   cpu: 10m
-    #   memory: 32Mi
-    requests:
-      cpu: 10m
-      memory: 32Mi
+#  resources:
+#     # limits:
+#     #   cpu: 10m
+#     #   memory: 32Mi
+#     requests:
+#       cpu: 10m
+#       memory: 32Mi
 
   ## Alertmanager service type
   ##
