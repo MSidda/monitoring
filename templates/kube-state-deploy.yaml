@@ -2,23 +2,23 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ .Values.kubeStateMetrics.name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Values.kubeStateMetrics.name }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
-  name: {{ template "kubeStateMetrics.fullname" . }}
+  name: {{ .Values.kubeStateMetrics.name }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ .Values.kubeStateMetrics.name }}
         component: "{{ .Values.kubeStateMetrics.name }}"
         release: "{{ .Release.Name }}"
     spec:
       containers:
-        - name: {{ template "name" . }}-{{ .Values.kubeStateMetrics.name }}
+        - name: {{ .Values.kubeStateMetrics.name }}-{{ .Values.kubeStateMetrics.name }}
           image: "{{ .Values.kubeStateMetrics.image }}"
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           ports:
