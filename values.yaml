@@ -12,66 +12,7 @@ alertmanager:
   ## Alertmanager Docker image
   ##
   image: prom/alertmanager:v0.5.1
-namespace: monitoring
-
-  #ingress:
-    ## If true, Alertmanager Ingress will be created
-    ##
-    #enabled: false
-
-    ## Alertmanager Ingress annotations
-    ##
-    # annotations:
-    #   kubernetes.io/ingress.class: nginx
-    #   kubernetes.io/tls-acme: 'true'
-
-    ## Alertmanager Ingress hostnames
-    ## Must be provided if Ingress is enabled
-    ##
-    # hosts:
-    #   - alertmanager.domain.com
-
-    ## Alertmanager Ingress TLS configuration
-    ## Secrets must be manually created in the namespace
-    ##
-    # tls:
-    #   - secretName: prometheus-alerts-tls
-    #     hosts:
-    #       - alertmanager.domain.com
-
-  ## Alertmanager container name
- 
-
-  persistentVolume:
-    ## If true, AlertManager will create a Persistent Volume Claim
-    ## If false, use emptyDir
-    ##
-    enabled: true
-
-    ## AlertManager data Persistent Volume access modes
-    ## Must match those of existing PV or dynamic provisioner
-    ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-    ##
-    accessModes:
-      - ReadWriteOnce
-
-    ## AlertManager data Persistent Volume annotations
-    ##
-    # annotations:
-
-    ## AlertManager data Persistent Volume size
-    ##
-    size: 2Gi
-
-    ## AlertManager data Persistent Volume Storage Class
-    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-    ## Default: volume.alpha.kubernetes.io/storage-class: default
-    ##
-    # storageClass:
-
-  ## Alertmanager resource requests and limits
-  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
+namespace: monitoring 
   resources:
     # limits:
     #   cpu: 10m
