@@ -10,6 +10,9 @@ metadata:
   name: {{ .Values.server.name }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.server.name }}
   template:
     metadata:
       annotations:
