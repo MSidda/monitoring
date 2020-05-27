@@ -1,4 +1,5 @@
 alertmanager:
+  name: alertmanager
   ## Alertmanager service port
   ##
   httpPort: 80
@@ -39,7 +40,7 @@ namespace: monitoring
     #       - alertmanager.domain.com
 
   ## Alertmanager container name
-  name: alertmanager
+ 
 
   persistentVolume:
     ## If true, AlertManager will create a Persistent Volume Claim
