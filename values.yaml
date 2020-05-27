@@ -13,6 +13,13 @@ alertmanager:
     ##
     accessModes:
       - ReadWriteOnce
+  resources:
+    limits:
+      cpu: 10m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
 
     ## alertmanager data Persistent Volume Claim annotations
     ##
@@ -52,13 +59,7 @@ alertmanager:
   ##
   image: prom/alertmanager:v0.5.1
 namespace: monitoring 
- resources:
-     limits:
-       cpu: 10m
-       memory: 32Mi
-    requests:
-      cpu: 10m
-      memory: 32Mi
+  
 ## Alertmanager data storage path
 ## Default: '/data'
 # storagePath: /data
