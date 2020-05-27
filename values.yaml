@@ -39,7 +39,6 @@ namespace: monitoring
     #       - alertmanager.domain.com
 
   ## Alertmanager container name
-  ##
   name: alertmanager
 
   persistentVolume:
