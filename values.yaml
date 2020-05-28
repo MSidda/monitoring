@@ -1,6 +1,7 @@
 alertmanager:
   name: alertmanager
   serviceType: ClusterIP
+  storageClassName: alertmanager-storage-volume
   persistentVolume:
     ## If true, alertmanager will create/use a Persistent Volume Claim
     ## If false, use emptyDir
@@ -28,7 +29,7 @@ alertmanager:
 
     ## alertmanager data Persistent Volume size
     ##
-    size: 2Gi
+    size: 1Gi
 
     ## alertmanager data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -715,7 +716,7 @@ serverConfigFile:
     ;config_file = /etc/grafana/ldap.toml
 
     [smtp]
-    ;enabled = false
+    ;enabled = true
     ;host = localhost:25
     ;user =
     ;password =
