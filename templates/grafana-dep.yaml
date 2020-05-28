@@ -59,10 +59,10 @@ spec:
         - name: grafana-storage
           configMap:
             name: {{ .Values.server.name }}-config
-        - name: dashboard-volume
+        - name: grafana-datasources
           configMap:
             name: {{ .Values.server.name }}-dashs
-        - name: grafana-datasources
+        - name: grafana-pvc
           persistentVolumeClaim:
             claimName: {{ .Values.server.name }}-config
     
