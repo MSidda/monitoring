@@ -24,8 +24,7 @@ spec:
         component: "{{ .Values.server.name }}"
         release: "{{ .Release.Name }}"
     spec:
-      securityContext:
-        runAsUser: 0
+      
       containers:
         - name: {{ .Values.server.name }}
           image: "{{ .Values.server.image }}"
@@ -56,7 +55,10 @@ spec:
               mountPath: /var/lib/grafana
             - name: grafana-datasources
               mountPath: /etc/grafana/provisioning/datasources
-                  
+      securityContext:
+        fsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0          
       volumes:
         - name: grafana-storage
           configMap:
