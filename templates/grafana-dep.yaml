@@ -51,10 +51,10 @@ spec:
 {{ toYaml .Values.server.resources | indent 12 }}
           volumeMounts:
             - name: grafana-storage
-              mountPath: {{ default "/var/lib/grafana" .Values.server.configLocalPath | quote }}
+              mountPath: /var/lib/grafana
             - name: grafana-datasources
-              mountPath: {{ default "/etc/grafana/provisioning/datasources" .Values.server.storageLocalPath | quote }}
-              
+              mountPath: /etc/grafana/provisioning/datasources
+              readOnly: false              
       volumes:
         - name: grafana-storage
           configMap:
