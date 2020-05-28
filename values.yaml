@@ -261,7 +261,7 @@ serverFiles:
       - job_name: prometheus
         static_configs:
           - targets:
-            - localhost:9090
+            - http://prometheus-mon.monitoring.svc:9090
 
       # Scrape configurations for running Prometheus on a Kubernetes cluster.
       # This uses separate scrape configs for cluster components (i.e. API server, node)
