@@ -11,9 +11,9 @@ spec:
       labels:
         name: node-exporter
     spec:
-      tolerations:
-      - key:  node-role.kubernetes.io/master
-        effect: NoSchedule
+      # tolerations:
+      # - key:  node-role.kubernetes.io/master
+      #   effect: NoSchedule
       containers:
       - image: prom/node-exporter
         name: node-exporter
