@@ -83,7 +83,6 @@ configmapReload:
 
 kubeStateMetrics:
   ## Kube-state-metrics service port
-  ##
   httpPort: 80
 
   ## Kube-state-metrics service port name
@@ -251,6 +250,12 @@ serverFiles:
     rule_files:
       - /etc/config/rules
       - /etc/config/alerts
+    alerting:
+      alertmanagers:
+      - scheme: http
+        static_configs:
+        - targets:
+          - "alertmanager.monitoring.svc:9093"
 
     scrape_configs:
       - job_name: prometheus
