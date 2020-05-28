@@ -54,7 +54,6 @@ spec:
               mountPath: {{ default "/var/lib/grafana" .Values.server.configLocalPath | quote }}
             - name: grafana-datasources
               mountPath: {{ default "/etc/grafana/provisioning/datasources" .Values.server.storageLocalPath | quote }}
-      terminationGracePeriodSeconds: {{ default 300 .Values.server.terminationGracePeriodSeconds }}
               readOnly: false
       volumes:
         - name: grafana-storage
