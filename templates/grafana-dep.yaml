@@ -39,13 +39,13 @@ spec:
           - name: GF_SECURITY_ADMIN_USER
             valueFrom:
               secretKeyRef:
-                name: grafana
-                key: admin-username
+                name: {{ .Values.server.name }}-secret
+                key: grafana-admin-user
           - name: GF_SECURITY_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: grafana
-                key: admin-password
+                name: {{ .Values.server.name }}-secret
+                key: grafana-admin-password
           - name: GF_AUTH_ANONYMOUS_ENABLED
             value: "false"
           # - name: GF_AUTH_ANONYMOUS_ORG_ROLE

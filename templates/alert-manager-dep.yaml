@@ -47,6 +47,8 @@ spec:
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           args:
             - --volume-dir=/etc/config
+            - --webhook-url=http://localhost:80/-/reload
+
           volumeMounts:
             - name: config-volume
               mountPath: /etc/config
