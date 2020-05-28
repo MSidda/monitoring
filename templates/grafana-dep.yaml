@@ -1,71 +1,81 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: grafana-mon-core
+  namespace: monitoring
   labels:
-    app: {{ .Values.server.name }}
-    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    component: "{{ .Values.server.name }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
-  name: {{ .Values.server.name }}
+    app: grafana
+    component: core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.server.name }}
+      app: grafana
+      component: core
   template:
     metadata:
-      annotations:
-      {{- range $key, $value := .Values.server.annotations }}
-        {{ $key }}: {{ $value }}
-      {{- end }}
       labels:
-        app: {{ .Values.server.name }}
-        component: "{{ .Values.server.name }}"
-        release: "{{ .Release.Name }}"
+        app: grafana
+        component: core
     spec:
-      
       containers:
-        - name: {{ .Values.server.name }}
-          image: "{{ .Values.server.image }}"
-          imagePullPolicy: {{ default "Always" .Values.server.imagePullPolicy }}
-          env:
-            - name: GF_SECURITY_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.server.name }}-secret
-                  key: grafana-admin-user
-            - name: GF_SECURITY_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.server.name }}-secret
-                  key: grafana-admin-password
-          ports:
-            - containerPort: 3000
-          readinessProbe:
-            httpGet:
-              path: /login
-              port: 3000
-            initialDelaySeconds: 30
-            timeoutSeconds: 30
-          resources:
-{{ toYaml .Values.server.resources | indent 12 }}
-          volumeMounts:
-            - name: grafana-storage
-              mountPath: /var/lib/grafana
-            - name: grafana-datasources
-              mountPath: /etc/grafana/provisioning/datasources
+      - image: grafana/grafana:latest
+        name: grafana-core
+        ports:
+        - name: grafana
+          containerPort: 3000
+        resources:
+          # keep request = limit to keep this container in guaranteed class
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          # The following env variables set up basic auth twith the default admin user and admin password.
+          - name: GF_AUTH_BASIC_ENABLED
+            value: "true"
+          - name: GF_SECURITY_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: grafana
+                key: admin-username
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: grafana
+                key: admin-password
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "false"
+          # - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+          #   value: Admin
+          # does not really work, because of template variables in exported dashboards:
+          # - name: GF_DASHBOARDS_JSON_ENABLED
+          #   value: "true"
+          # readinessProbe:
+          #httpGet:
+          # path: /login
+          #  port: 3000
+          # initialDelaySeconds: 30
+          # timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+        - mountPath: /var/lib/grafana
+          name: grafana-storage
+           
       securityContext:
         fsGroup: 0
         runAsNonRoot: false
-        runAsUser: 0          
+        runAsUser: 0
       volumes:
-        - name: grafana-storage
-          configMap:
-            name: {{ .Values.server.name }}-config
-        - name: grafana-datasources
-          configMap:
-            name: {{ .Values.server.name }}-dashs
-        - name: grafana-pvc
-          persistentVolumeClaim:
-            claimName: {{ .Values.server.name }}-config
+       - name: config-volume
+         configMap:
+          name: {{ .Values.server.name }}-config
+       - name: grafana-datasources
+         configMap:
+          name: {{ .Values.server.name }}-dashs
+       - name: grafana-storage
+         persistentVolumeClaim:
+          claimName: {{ .Values.server.name }}-config
