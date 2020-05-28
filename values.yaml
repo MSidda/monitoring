@@ -448,7 +448,7 @@ server:
 
   ## Grafana Docker image
   ##
-  image: "grafana/grafana:5.0.0"
+  image: "grafana/grafana:6.6.2"
 
   ingress:
     ## If true, Grafana Ingress will be created
