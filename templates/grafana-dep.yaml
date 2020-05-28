@@ -54,7 +54,7 @@ spec:
               mountPath: {{ default "/var/lib/grafana" .Values.server.configLocalPath | quote }}
             - name: grafana-datasources
               mountPath: {{ default "/etc/grafana/provisioning/datasources" .Values.server.storageLocalPath | quote }}
-              readOnly: false
+              
       volumes:
         - name: grafana-storage
           configMap:
@@ -62,8 +62,6 @@ spec:
         - name: grafana-datasources
           configMap:
             name: {{ .Values.server.name }}-dashs
-            defaultMode: 420
         - name: grafana-pvc
           persistentVolumeClaim:
             claimName: {{ .Values.server.name }}-config
-    
