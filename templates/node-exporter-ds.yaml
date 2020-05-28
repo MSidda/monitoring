@@ -16,12 +16,6 @@ spec:
         effect: NoSchedule
       containers:
       - image: prom/node-exporter
-        args: [
-          "--path.procfs=/host/proc",
-          "--path.sysfs=/host/sys",
-          #"--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)",
-          "- --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/overlay)($|/)",
-        ]
         name: node-exporter
         ports:
         - containerPort: 9100

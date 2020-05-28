@@ -120,21 +120,6 @@ reclaimPolicy: Retain
 mountOptions:
   - debug
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: grafana-pv-claim
-  namespace: monitoring
-  labels:
-    name: grafana-pv-claim
-spec:
-  storageClassName: grafana-storage-volume
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 50Gi
----
 apiVersion: v1
 kind: Service
 metadata:
