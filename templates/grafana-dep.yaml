@@ -59,7 +59,6 @@ spec:
         - name: grafana-storage
           configMap:
             name: {{ .Values.server.name }}-config
-            defaultMode: 420
         - name: grafana-datasources
           configMap:
             name: {{ .Values.server.name }}-dashs
