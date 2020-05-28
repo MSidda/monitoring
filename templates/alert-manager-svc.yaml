@@ -7,7 +7,7 @@ metadata:
     component: "{{ .Values.alertmanager.name }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
-  name: {{ template "alertmanager.fullname" . }}
+  name: {{.Values.alertmanager.name }}
 spec:
   ports:
     - port: {{ .Values.alertmanager.httpPort }}

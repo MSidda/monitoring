@@ -47,7 +47,6 @@ spec:
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           args:
             - --volume-dir=/etc/config
-            - --webhook-url=http://localhost:9093/-/reload
           volumeMounts:
             - name: config-volume
               mountPath: /etc/config
@@ -55,7 +54,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ .Values.alertmanager.name }}
+            name: {{.Values.alertmanager.name }}
         - name: storage-volume
       {{- if .Values.alertmanager.persistentVolume.enabled }}
           persistentVolumeClaim:
