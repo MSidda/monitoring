@@ -25,8 +25,7 @@ spec:
         release: "{{ .Release.Name }}"
     spec:
       securityContext:
-        runAsUser: 472
-        fsGroup: 472
+        runAsUser: 0
       containers:
         - name: {{ .Values.server.name }}
           image: "{{ .Values.server.image }}"
