@@ -221,21 +221,23 @@ server:
 ## Alertmanager ConfigMap entries
 ##
 alertmanagerFiles:
-  alertmanager.yml: |
-    global:
-      # slack_api_url: ''
+alertmanager.yml: |
+  global:
+  resolve_timeout: 1m
 
-    receivers:
-      - name: default-receiver
-        # slack_configs:
-        #  - channel: '@you'
-        #    send_resolved: true
+  route:
+  receiver: 'gmail-notifications'
 
-    route:
-      group_wait: 10s
-      group_interval: 5m
-      receiver: default-receiver
-      repeat_interval: 3h
+  receivers:
+    - name: 'gmail-notifications'
+  email_configs:
+  - to: msr2858@gmail.com
+    from: msr2858@gmail.com
+    smarthost: smtp.gmail.com:587
+    auth_username: msr2858@gmail.com
+    auth_identity: msr2858@gmail.com
+    auth_password: password
+    send_resolved: true
 
 ## Server ConfigMap entries
 ##
@@ -256,7 +258,7 @@ serverFiles:
       - scheme: http
         static_configs:
         - targets:
-          - "prom-alerts.monitoring.svc:80"
+          - "alertmanager.monitoring.svc:80"
 
     scrape_configs:
       - job_name: prometheus
@@ -716,17 +718,17 @@ serverConfigFile:
     ;config_file = /etc/grafana/ldap.toml
 
     [smtp]
-    ;enabled = true
-    ;host = localhost:25
-    ;user =
-    ;password =
+    enabled = true
+    host = smtp.gmail.com:587
+    user = msr2858@gmail.com
+    password = password1@
     ;cert_file =
     ;key_file =
-    ;skip_verify = false
-    ;from_address = admin@grafana.localhost
+    skip_verify = true
+    from_address = msr2858@gmail.com
 
     [emails]
-    ;welcome_email_on_sign_up = false
+    welcome_email_on_sign_up = true
 
     [log]
     mode = console

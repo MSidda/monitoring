@@ -6,12 +6,10 @@ metadata:
  #   cloud.google.com/load-balancer-type: "Internal"
   name: prometheus-mon
   namespace: monitoring
-  labels:
-    name: prometheus
 spec:
   selector:
     app: prometheus-server
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: prometheus
     protocol: TCP
